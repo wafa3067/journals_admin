@@ -1,0 +1,12 @@
+server {
+    listen 80;
+    server_name 43.207.106.203; 
+    location / {
+        proxy_pass ${BACKEND_URL}; 
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
