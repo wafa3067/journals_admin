@@ -1,7 +1,10 @@
 import { AlertProvider } from "./components/AlertProvider";
 import "./globals.css";
 import StoreProvider from "./providers/StoreProvider";
-import { Open_Sans } from "next/font/google";
+import { Open_Sans, Geist } from "next/font/google";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const openSans = Open_Sans({
   subsets: ["latin"],
@@ -15,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={openSans.variable}>
+    <html lang="en" className={cn("font-sans", geist.variable)}>
       <body className="min-h-screen flex flex-col font-sans">
         <StoreProvider>
           <AlertProvider>{children}</AlertProvider>
