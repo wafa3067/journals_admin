@@ -6,7 +6,7 @@ import {
   addAnnouncement,
   deleteAnnouncementData,
 } from "../../adminSlice/announcement/addAnnouncementSlice";
-import NewsCard from "@/app/components/news_card";
+import NewsCard from "@/app/(main)/components/news_card";
 import { getNewsData } from "../../adminSlice/news/newsGetSlice";
 import { addNewsPage, deleteNews } from "../../adminSlice/news/newsAddSlice";
 interface EditorData {

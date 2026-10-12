@@ -22,6 +22,7 @@ export interface Article {
   pdf?: string;
   reviewerComment?: string;
   status: string;
+  reviewerAnser?: string;
   copyeditor?: string;
   approvedBy?: string;
   showDetails?: boolean; // for UI toggle

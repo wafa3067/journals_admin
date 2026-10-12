@@ -1,10 +1,10 @@
 "use client";
-import EditorComponent from "@/app/components/editor_component";
+import EditorComponent from "@/app/(main)/components/editor_component";
 import { useAppDispatch, useAppSelector } from "@/app/api/hooks/hooks";
 import { useEffect, useState } from "react";
 import { GetTeamThunk } from "../../adminSlice/team/getTeamSlice";
 
-import CategoryDropdown from "@/app/components/category_dropdown";
+import CategoryDropdown from "@/app/(main)/components/category_dropdown";
 import {
   addCategory,
   addTeamPage,

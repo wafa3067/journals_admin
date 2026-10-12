@@ -1,6 +1,6 @@
 "use client";
-import CategoryDropdown from "@/app/components/category_dropdown";
-import CustomDropdown from "@/app/components/custom_dropdown";
+import CategoryDropdown from "@/app/(main)/components/category_dropdown";
+import CustomDropdown from "@/app/(main)/components/custom_dropdown";
 import { useAppDispatch, useAppSelector } from "@/app/api/hooks/hooks";
 import React, { useEffect, useState } from "react";
 import {
@@ -9,10 +9,10 @@ import {
   deleteinsightData,
   AddJournalsInsights,
 } from "../../adminSlice/journals/addJournals";
-import DeleteModel from "@/app/components/deleteModel";
+import DeleteModel from "@/app/(main)/components/deleteModel";
 import { Link } from "lucide-react";
 import { getJournals } from "../../adminSlice/journals/getJournals";
-import CustomText from "@/app/components/custom_text";
+import CustomText from "@/app/(main)/components/custom_text";
 
 function Page() {
   const dispatch = useAppDispatch();

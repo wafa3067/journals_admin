@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/api/hooks/hooks";
-import { fetchUsers, User } from "../adminSlice/userSlice";
-import LoadingSpinner from "@/app/components/loading_spannier";
-import { deleteUser, updateUserStatus } from "../adminSlice/updateUserSlice";
+import { fetchUsers, User } from "../../adminSlice/userSlice";
+import LoadingSpinner from "@/app/(main)/components/loading_spannier";
+import { deleteUser, updateUserStatus } from "../../adminSlice/updateUserSlice";
 import { useAlert } from "@/app/components/AlertProvider";
 
 const UserManagement = () => {

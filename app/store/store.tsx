@@ -72,6 +72,9 @@ import addServicesPage from "../admin/adminSlice/services/servicesAddSlice";
 import getServicesData from "../admin/adminSlice/services/servicesGetSlice";
 import getPartnershipData from "../admin/adminSlice/partnership/partnershipGetSlice";
 import addPartnershipPage from "../admin/adminSlice/partnership/partnershipAddSlice";
+import SubAdminSlice from "../admin/adminSlice/subuser/subuserslice";
+import reviewer from "../admin/adminSlice/reviewer/reviewerSlice";
+import assigned from "../admin/adminSlice/assigned/assignedSlice";
 let storeInstance: ReturnType<typeof configureStore> | null = null;
 //console.log("🧠 Store is being created..."); // 👈 ADD THIS
 
@@ -163,6 +166,9 @@ export function makeStore() {
 
       getPrivacy: getPrivacyInsights,
       addPrivacy: AddPrivacy,
+      subadmin: SubAdminSlice,
+      reviewer: reviewer,
+      assigned: assigned,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({

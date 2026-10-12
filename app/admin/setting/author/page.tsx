@@ -1,5 +1,5 @@
 "use client";
-import EditorInput from "@/app/components/editor_input";
+import EditorInput from "@/app/(main)/components/editor_input";
 import { useAppDispatch } from "@/app/api/hooks/hooks";
 import React from "react";
 import { addAuthorPage } from "../../adminSlice/author/addAuthorSlice";

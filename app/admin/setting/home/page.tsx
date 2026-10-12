@@ -1,6 +1,6 @@
 "use client";
-import CustomText from "@/app/components/custom_text";
-import EditorsList from "@/app/components/EditorsList";
+import CustomText from "@/app/(main)/components/custom_text";
+import EditorsList from "@/app/(main)/components/EditorsList";
 import { useAppDispatch, useAppSelector } from "@/app/api/hooks/hooks";
 import React, { useEffect, useState } from "react";
 import {
@@ -24,11 +24,11 @@ import {
   CreateEditorHomeState,
   GetEditorHomeState,
 } from "../../adminSlice/editor/getEditorSlice";
-import ModelComponent from "@/app/components/model_component";
-import DeleteModel from "@/app/components/deleteModel";
-import EditorModelComponent from "@/app/components/model_editor";
-import EditorCard from "@/app/components/EditorCard";
-import Carousel from "@/app/components/mini_crasual";
+import ModelComponent from "@/app/(main)/components/model_component";
+import DeleteModel from "@/app/(main)/components/deleteModel";
+import EditorModelComponent from "@/app/(main)/components/model_editor";
+import EditorCard from "@/app/(main)/components/EditorCard";
+import Carousel from "@/app/(main)/components/mini_crasual";
 import { BACKEND_URL } from "@/app/api/actions/articleActions";
 
 interface HomeData {

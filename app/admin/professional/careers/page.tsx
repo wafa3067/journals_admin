@@ -11,7 +11,7 @@ import {
   deleteCareers,
 } from "../../adminSlice/careers/careersAddSlice";
 import { getCareersData } from "../../adminSlice/careers/careersGetSlice";
-import NewsCard from "@/app/components/news_card";
+import NewsCard from "@/app/(main)/components/news_card";
 
 interface EditorData {
   title: string;

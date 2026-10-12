@@ -10,17 +10,23 @@ import {
 } from "../adminSlice/pending";
 
 import { sendArticleEmail, sendReviewerEmail } from "../adminSlice/emailSlice";
-import { useAlert } from "@/app/components/AlertProvider";
 import { addNotification } from "../adminSlice/notificationSlice";
-import CustomText from "@/app/components/custom_text";
-import QuillViewer from "@/app/components/rectquilviwer";
+import CustomText from "@/app/(main)/components/custom_text";
+import QuillViewer from "@/app/(main)/components/rectquilviwer";
 import { useRouter } from "next/navigation";
 import { FRONT } from "@/app/api/actions/articleActions";
+import CustomDropdown from "@/app/(main)/components/custom_dropdown";
+import CustomDropdownReviewer from "@/app/(main)/components/CustomDropdownReviewer";
+import { fetchReviewers } from "../adminSlice/reviewer/reviewerSlice";
+import { assignArticle } from "../adminSlice/assigned/assignedSlice";
+import { useAlert } from "@/app/components/AlertProvider";
 
 export default function PendingArticles() {
   const dispatch = useAppDispatch();
   const { articles, loading } = useAppSelector((state) => state.pending);
+  const { reviewers } = useAppSelector((state) => state.reviewer);
   const [reviwerEmail, setReviwerEmail] = useState<string>();
+  const [reviewerId, setReviewerId] = useState<number>(0);
   // Local state for reviewer inputs
   const [reviewInputs, setReviewInputs] = useState<
     Record<number, { reviewer: string; start: string; end: string }>
@@ -28,6 +34,7 @@ export default function PendingArticles() {
 
   useEffect(() => {
     dispatch(fetchPendingArticles());
+    dispatch(fetchReviewers());
   }, [dispatch]);
   const { showAlert } = useAlert();
 
@@ -352,7 +359,24 @@ export default function PendingArticles() {
                     {/* Reviewer Assignment */}
                     {article.status === "pending" && (
                       <div className="space-y-2">
+                        <CustomDropdownReviewer
+                          options={reviewers.map((rev) => ({
+                            id: rev.id,
+                            name: rev.name ?? "",
+                            email: rev.email,
+                          }))}
+                          starting="Select Reviewer"
+                          selectedOption={reviwerEmail}
+                          is_optins={true}
+                          onChange={(name, email, id) => {
+                            handleInputChange(article.id, "reviewer", name);
+                            setReviwerEmail(email);
+                            setReviewerId(id);
+                          }}
+                        />
+
                         <input
+                          readOnly
                           type="text"
                           placeholder="Reviewer Name"
                           className="border rounded px-2 py-1 w-full"
@@ -367,7 +391,9 @@ export default function PendingArticles() {
                         />
 
                         <input
+                          readOnly
                           type="email"
+                          value={reviwerEmail}
                           placeholder="Reviewer Email"
                           className="border rounded px-2 py-1 w-full"
                           onChange={(e) => setReviwerEmail(e.target.value)}

@@ -10,11 +10,16 @@ import {
 import { sendArticleEmail } from "../adminSlice/emailSlice";
 import { fetchRejectedArticle } from "../adminSlice/rejectedDataslice";
 import { useAlert } from "@/app/components/AlertProvider";
-import CustomText from "@/app/components/custom_text";
-import QuillViewer from "@/app/components/rectquilviwer";
+import CustomText from "@/app/(main)/components/custom_text";
+import QuillViewer from "@/app/(main)/components/rectquilviwer";
+import CustomDropdownReviewer from "@/app/(main)/components/CustomDropdownReviewer";
+import { assignArticle } from "../adminSlice/assigned/assignedSlice";
 
 export default function Page() {
   const dispatch = useAppDispatch();
+  const { reviewers } = useAppSelector((state) => state.reviewer);
+  const [reviwerEmail, setReviwerEmail] = useState<string>();
+  const [reviewerId, setReviewerId] = useState<number>(0);
   const { articles, loading } = useAppSelector(
     (state) => state.rejectedArtical,
   );
@@ -241,7 +246,24 @@ export default function Page() {
                     {/* Reviewer Assignment */}
                     {article.status === "Rejected" && (
                       <div className="space-y-2">
+                        <CustomDropdownReviewer
+                          options={reviewers.map((rev) => ({
+                            id: rev.id,
+                            name: rev.name ?? "",
+                            email: rev.email,
+                          }))}
+                          starting="Select Reviewer"
+                          selectedOption={reviwerEmail}
+                          is_optins={true}
+                          onChange={(name, email, id) => {
+                            handleInputChange(article.id, "reviewer", name);
+                            setReviwerEmail(email);
+                            setReviewerId(id);
+                          }}
+                        />
+
                         <input
+                          readOnly
                           type="text"
                           placeholder="Reviewer Name"
                           className="border rounded px-2 py-1 w-full"
@@ -253,6 +275,15 @@ export default function Page() {
                               e.target.value,
                             )
                           }
+                        />
+
+                        <input
+                          readOnly
+                          type="email"
+                          value={reviwerEmail}
+                          placeholder="Reviewer Email"
+                          className="border rounded px-2 py-1 w-full"
+                          onChange={(e) => setReviwerEmail(e.target.value)}
                         />
                         <CustomText
                           text={"Review start date:"}

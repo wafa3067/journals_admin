@@ -12,7 +12,7 @@ import { fetchApproved } from "../adminSlice/approved";
 import AlertInputDialog from "../components/alert_input";
 import { rejectArticleStatus } from "../adminSlice/rejectArticalStatusSlice";
 import { useAlert } from "@/app/components/AlertProvider";
-import QuillViewer from "@/app/components/rectquilviwer";
+import QuillViewer from "@/app/(main)/components/rectquilviwer";
 
 export default function PendingArticles() {
   const dispatch = useAppDispatch();

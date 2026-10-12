@@ -11,7 +11,7 @@ import {
   deletePartnership,
 } from "../../adminSlice/partnership/partnershipAddSlice";
 import { getPartnershipData } from "../../adminSlice/partnership/partnershipGetSlice";
-import NewsCard from "@/app/components/news_card";
+import NewsCard from "@/app/(main)/components/news_card";
 
 interface EditorData {
   title: string;

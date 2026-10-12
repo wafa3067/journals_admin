@@ -8,9 +8,9 @@ import {
   editcontactData,
   sendMail,
 } from "../../adminSlice/contact_info/addContactInfo";
-import DeleteModel from "@/app/components/deleteModel";
+import DeleteModel from "@/app/(main)/components/deleteModel";
 import { deleteContact } from "../../adminSlice/contact/addContactSlice";
-import CustomText from "@/app/components/custom_text";
+import CustomText from "@/app/(main)/components/custom_text";
 
 function Page() {
   const dispatch = useAppDispatch();

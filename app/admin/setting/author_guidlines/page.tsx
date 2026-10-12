@@ -1,6 +1,6 @@
 "use client";
-import CategoryDropdown from "@/app/components/category_dropdown";
-import CustomDropdown from "@/app/components/custom_dropdown";
+import CategoryDropdown from "@/app/(main)/components/category_dropdown";
+import CustomDropdown from "@/app/(main)/components/custom_dropdown";
 import { useAppDispatch, useAppSelector } from "@/app/api/hooks/hooks";
 import React, { useEffect, useState } from "react";
 import {
@@ -8,7 +8,7 @@ import {
   editContact,
   deleteContact,
 } from "../../adminSlice/contact/addContactSlice";
-import DeleteModel from "@/app/components/deleteModel";
+import DeleteModel from "@/app/(main)/components/deleteModel";
 import { Link } from "lucide-react";
 import {
   AddAuthorGuidlines,
@@ -16,7 +16,7 @@ import {
   editauthorData,
 } from "../../adminSlice/authorsguidlines/addAuthorsGuidlines";
 import { deleteAboutData } from "../../adminSlice/home/homePageSlice";
-import CustomText from "@/app/components/custom_text";
+import CustomText from "@/app/(main)/components/custom_text";
 import { getAuthorsGuidlines } from "../../adminSlice/authorsguidlines/getAuthorsGuidlines";
 
 function Page() {

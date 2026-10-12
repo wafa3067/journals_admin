@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../api/hooks/hooks";
-import { sendArticleEmail } from "../adminSlice/emailSlice";
+import { sendArticleEmail, sendReviewerEmail } from "../adminSlice/emailSlice";
 import { assignToProduction } from "../adminSlice/copyeditorSlice";
 import AlertInputDialog from "../components/alert_input";
 import { rejectArticleStatus } from "../adminSlice/rejectArticalStatusSlice";
@@ -16,10 +16,12 @@ import {
   updateProductModification,
   updateUserProductionComments,
 } from "@/app/api/slice/getArticleSlice";
-import QuillViewer from "@/app/components/rectquilviwer";
+import QuillViewer from "@/app/(main)/components/rectquilviwer";
+import { FRONT } from "@/app/api/actions/articleActions";
 
 export default function Page() {
   const dispatch = useAppDispatch();
+  const [openModel, setOpenModel] = useState<"add" | null>(null);
   const { articles, loading } = useAppSelector((state) => state.production);
   const [new_value, setNewValue] = useState("");
 
@@ -406,6 +408,106 @@ Editorial Office`);
       dispatch(fetchProduction());
     });
   };
+
+  const [reviewInputs, setReviewInputs] = useState<string>();
+
+  const sendForDownlpad = (article: Article) => {
+    dispatch(
+      sendReviewerEmail({
+        toEmail: article.email ?? "",
+        authorName: article.givenName,
+        articleTitle: article.title,
+        status: "Proof Reading",
+        body: `<html>
+      <body style="margin:0; padding:0; background-color:#f5f7fa; font-family:'Segoe UI', Arial, sans-serif;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 0;">
+          <tr>
+            <td align="center">
+              <table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.08); overflow:hidden;">
+                
+                <!-- Header -->
+                <tr>
+                  <td align="center" style="background-color:#2563eb; padding:30px;">
+                    <h1 style="margin:0; color:#ffffff; font-size:24px;">
+                      Proof Reading Request for Your Article Submission
+                    </h1>
+                  </td>
+                </tr>
+    
+                <!-- Greeting -->
+                <tr>
+                  <td style="padding:25px 35px 10px 35px; font-size:16px; color:#111827;">
+                    Hello <strong>${article.givenName || "Reviewer"}</strong>,
+                  </td>
+                </tr>
+    
+                <!-- Message -->
+                <tr>
+                  <td style="padding:10px 35px 20px 35px; font-size:15px; color:#374151; line-height:1.6;">
+                    <p style="margin:0 0 12px 0;">
+                        Please download the manuscript using the link below and carefully proofread it for grammar, spelling, punctuation, formatting, and clarity. Kindly provide your corrections and suggestions to ensure the manuscript meets the journal’s publication standards.
+  
+                    </p>
+                  
+                  </td>
+                </tr>
+
+                <tr>
+                  <td style="padding:25px 35px 10px 35px; font-size:16px; color:#111827;">
+                  Deadline: Please complete the proofreading and submit your feedback by ${reviewInputs || "Reviewer"}.
+                 
+                  </td>
+                </tr>
+    
+                <!-- Article Details -->
+                <tr>
+                  <td style="background-color:#f9fafb; padding:25px 35px;">
+                    <h3 style="margin:0 0 15px 0; color:#2563eb;">Article Details</h3>
+                    <table cellpadding="6" cellspacing="0" width="100%" style="color:#374151; font-size:14px;">
+                      <tr>
+                        <td style="font-weight:bold;">Title:</td>
+                        <td>${article.title}</td>
+                      </tr>
+                      <tr>
+                        <td style="font-weight:bold;">Author:</td>
+                        <td>${article.givenName} ${article.familyName}</td>
+                      </tr>
+                      <tr>
+                        <td style="font-weight:bold;">Submission Date:</td>
+                        <td>${article.createdAt?.toString()}</td>
+                      </tr>
+                        <tr>
+                        <td style="font-weight:bold;">File:</td>
+                       <a href="${FRONT}${article.pdf}"
+                          style="background-color:#088F8F; color:#ffffff; padding:12px 24px; text-decoration:none; border-radius:8px; display:inline-block;">
+                        Download File
+                       </a>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+    
+             
+    
+                <!-- Footer -->
+                <tr>
+                  <td align="center" style="padding:20px; font-size:12px; color:#9ca3af;">
+                    © 2025 Journal System. All rights reserved.
+                  </td>
+                </tr>
+    
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+    </html>`,
+      }),
+    ).then(() => {
+      alert("Request Sent Successfully");
+    });
+  };
+
   return (
     <main>
       <div className="flex-1 flex flex-col overflow-hidden">
@@ -494,6 +596,26 @@ Editorial Office`);
                       </a>
                     </div>
                   ) : null}
+                  <p>Timeline for proof reading</p>
+                  <input
+                    type="date"
+                    className="border rounded px-2 py-1 w-full"
+                    onChange={(e) => setReviewInputs(e.target.value)}
+                  />
+                  <button
+                    className="bg-[#00b4d8] text-white px-3 py-1 rounded hover:bg-[#00b4d8]"
+                    onClick={() => {
+                      if (reviewInputs == null) {
+                        alert(
+                          "Please select the date before sending the article to author",
+                        );
+                        return null;
+                      }
+                      sendForDownlpad(article);
+                    }}
+                  >
+                    Sent Proof Readings to Author
+                  </button>
                   <div className="mt-3 space-x-2">
                     {article.status === "Production" && (
                       <div className="space-y-2  mb-4 ">

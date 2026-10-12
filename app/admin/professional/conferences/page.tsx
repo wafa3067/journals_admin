@@ -11,7 +11,7 @@ import {
   deleteConferences,
 } from "../../adminSlice/conferences/conferencesAddSlice";
 import { getConferencesData } from "../../adminSlice/conferences/conferencesGetSlice";
-import NewsCard from "@/app/components/news_card";
+import NewsCard from "@/app/(main)/components/news_card";
 
 interface EditorData {
   title: string;

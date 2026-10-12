@@ -13,11 +13,15 @@ import AlertInputDialog from "../components/alert_input";
 import { rejectArticleStatus } from "../adminSlice/rejectArticalStatusSlice";
 import { useAlert } from "@/app/components/AlertProvider";
 import { addNotification } from "../adminSlice/notificationSlice";
-import QuillViewer from "@/app/components/rectquilviwer";
+import QuillViewer from "@/app/(main)/components/rectquilviwer";
 import { FRONT } from "@/app/api/actions/articleActions";
+import CustomDropdownReviewer from "@/app/(main)/components/CustomDropdownReviewer";
+import { fetchReviewers } from "../adminSlice/reviewer/reviewerSlice";
+import { assignArticle } from "../adminSlice/assigned/assignedSlice";
 
 export default function UnderReviewPage() {
   const dispatch = useAppDispatch();
+  const { reviewers } = useAppSelector((state) => state.reviewer);
   const { articles, loading } = useAppSelector((state) => state.underreview);
   const [reviewInputs, setReviewInputs] = useState<
     Record<
@@ -29,6 +33,7 @@ export default function UnderReviewPage() {
   const [successMessage, setSuccessMessage] = useState<string>("");
   useEffect(() => {
     dispatch(fetchUnderReview());
+    dispatch(fetchReviewers());
   }, [dispatch]);
 
   // Filter articles that are currently "Under Review"
@@ -296,6 +301,7 @@ export default function UnderReviewPage() {
 
   const [reviwerEmail, setReviwerEmail] = useState<string>();
   const [reviwerName, setReviwerName] = useState<string>();
+  const [reviewerId, setReviewerId] = useState<number>(0);
 
   const sendForDownlpad = (article: Article) => {
     const input = reviewInputs[article.id] || {};
@@ -385,6 +391,12 @@ export default function UnderReviewPage() {
   </html>`,
       }),
     ).then(() => {
+      dispatch(
+        assignArticle({
+          reviewerId: reviewerId,
+          articleId: article.id,
+        }),
+      );
       alert("Request Sent Successfully");
     });
   };
@@ -490,6 +502,7 @@ export default function UnderReviewPage() {
       alert("Request Sent Successfully");
     });
   };
+
   return (
     <main>
       <div className="flex-1 flex flex-col overflow-hidden">
@@ -558,10 +571,29 @@ export default function UnderReviewPage() {
                     <div>
                       <p>
                         {article.reviewerAnser == "Yes"
-                          ? "Reviewer Accepted Changes"
-                          : "Reviewer does not Accepted Changes"}
+                          ? "Reviewer Accepted to Review article"
+                          : "Reviewer does not Accepted to review article"}
                       </p>
+                      <CustomDropdownReviewer
+                        options={reviewers.map((rev) => ({
+                          id: rev.id,
+                          name: rev.name ?? "",
+                          email: rev.email,
+                        }))}
+                        starting="Select Reviewer"
+                        selectedOption={reviwerEmail}
+                        is_optins={true}
+                        onChange={(name, email, id) => {
+                          setReviwerName(name);
+                          setReviwerEmail(email);
+                          setReviewerId(id);
+                        }}
+                      />
+                      <div className="mb-2" />
+
                       <input
+                        readOnly
+                        value={reviwerName}
                         type="text"
                         placeholder="Reviewer Name"
                         className="border rounded px-2 py-1 w-full"
@@ -569,6 +601,8 @@ export default function UnderReviewPage() {
                       />
 
                       <input
+                        readOnly
+                        value={reviwerEmail}
                         type="email"
                         placeholder="Reviewer Email"
                         className="border rounded px-2 py-1 w-full mb-2 mt-2"

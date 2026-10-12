@@ -19,10 +19,18 @@ export interface Article {
   referenceText?: string;
   pdf?: string;
   reviewerComment?: string;
+  user: string;
   status: string;
   copyeditor?: string;
   approvedBy?: string;
+  contributorsList: ContributorsList[];
   showDetails?: boolean; // for UI toggle
+}
+interface ContributorsList {
+  giveName: string;
+  name: string;
+  email: string;
+  affiliation?: string;
 }
 
 interface UnderReviewState {
