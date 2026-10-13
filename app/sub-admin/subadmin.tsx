@@ -3,7 +3,7 @@
 import CustomText from "@/app/(main)/components/custom_text";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { MdOutlineUpdate, MdPassword } from "react-icons/md";
 import { TbPasswordUser } from "react-icons/tb";
@@ -160,7 +160,7 @@ const SubAdminSidebar = (val: data) => {
       href: "/admin/setting/privacy",
     },
   ];
-
+  const router = useRouter();
   // user management
   const userMangement = [
     {
@@ -261,14 +261,14 @@ const SubAdminSidebar = (val: data) => {
               await localStorage.removeItem("adminToken");
               await localStorage.removeItem("permissions");
 
-              navigation.navigate("/");
+              router.push("/");
             }}
           />
           <TbPasswordUser
             size={25}
             color="white"
             onClick={async () => {
-              navigation.navigate("/admin/users/sub-admin-update");
+              router.push("/admin/users/sub-admin-update");
             }}
           />
           {/* Mobile close button */}

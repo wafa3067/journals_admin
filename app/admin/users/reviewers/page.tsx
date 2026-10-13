@@ -412,6 +412,7 @@ export default function ReviewersPage() {
       )}
 
       <div
+        className="h-[calc(100vh-120px)] overflow-y-auto space-y-3"
         style={{
           background: "#f8fafc",
           borderRadius: 12,

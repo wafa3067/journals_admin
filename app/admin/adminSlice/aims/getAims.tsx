@@ -1,4 +1,3 @@
-import Aims from "@/app/(main)/aims/page";
 import { BACKEND_URL } from "@/app/api/actions/articleActions";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 

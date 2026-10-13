@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { logout } from "../adminSlice/adminAuthSlice";
 import { useAppDispatch } from "@/app/api/hooks/hooks";
+import { useRouter } from "next/router";
 
 const AdminSidebar = () => {
   const pathname = usePathname();
@@ -197,7 +198,7 @@ const AdminSidebar = () => {
   const isSettingsActive = settingsStages.some(
     (item) => pathname === item.href,
   );
-
+  const router = useRouter();
   // --------------------------------------------------
   // Menu item component
   // --------------------------------------------------
@@ -256,7 +257,7 @@ const AdminSidebar = () => {
             color="white"
             onClick={() => {
               dispatch(logout());
-              navigation.navigate("/");
+              router.push("/");
             }}
           />
           {/* Mobile close button */}

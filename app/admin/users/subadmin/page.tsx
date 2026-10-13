@@ -363,7 +363,8 @@ export default function SubAdminPage() {
       </Dialog>
 
       {/* Users List */}
-      <div className="space-y-3">
+      <div className="h-[calc(100vh-120px)] overflow-y-auto space-y-3 ">
+        {" "}
         {loading && users.length === 0 ? (
           <div className="text-center text-gray-500 py-10">
             Loading users...
@@ -376,7 +377,7 @@ export default function SubAdminPage() {
           users.map((user) => (
             <div
               key={user.id}
-              className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 border rounded-lg bg-white hover:bg-gray-50 transition-colors"
+              className=" flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 border rounded-lg bg-white hover:bg-gray-50 transition-colors"
             >
               <div className="flex-1 min-w-0 space-y-2">
                 <div className="font-medium text-gray-900 break-all">
