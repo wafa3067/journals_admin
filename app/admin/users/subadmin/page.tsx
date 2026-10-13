@@ -19,6 +19,8 @@ import {
   registerSubUserWithPermissions,
   updateSubUserPermissions,
 } from "../../adminSlice/subuser/subuserslice";
+import { sendReviewerEmail } from "../../adminSlice/emailSlice";
+import { sendMail } from "../../adminSlice/contact_info/addContactInfo";
 
 interface User {
   id: number;
@@ -75,7 +77,101 @@ export default function SubAdminPage() {
           password,
           permissions,
         }),
-      ).unwrap();
+      )
+        .unwrap()
+        .then(() => {
+          dispatch(
+            sendMail({
+              email: email,
+
+              subject: "Sub Admin Account Created",
+
+              body: `
+         <!DOCTYPE html>
+<html>
+  <body style="margin:0; padding:0; background-color:#f5f7fa; font-family:'Segoe UI', Arial, sans-serif;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 0;">
+      <tr>
+        <td align="center">
+          <table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.08); overflow:hidden;">
+
+            <!-- Header -->
+            <tr>
+              <td align="center" style="background-color:#2563eb; padding:25px;">
+                <h1 style="margin:0; color:#ffffff; font-size:22px;">
+                  Sub Admin Account Created
+                </h1>
+              </td>
+            </tr>
+
+            <!-- Greeting -->
+            <tr>
+              <td style="padding:25px 35px 10px; font-size:18px; color:#111827;">
+                Hello <strong>${name}</strong>,
+              </td>
+            </tr>
+
+            <!-- Message -->
+            <tr>
+              <td style="padding:10px 35px 20px; font-size:15px; color:#374151; line-height:1.7;">
+                <p>
+                  Your Sub Admin account has been created successfully.
+                  You can use the login credentials below to access the
+                  Sub Admin dashboard and manage your assigned administrative tasks.
+                </p>
+              </td>
+            </tr>
+
+            <!-- Login Details -->
+            <tr>
+              <td style="background-color:#f9fafb; padding:25px 35px;">
+                <h3 style="margin:0 0 18px; color:#2563eb; font-size:18px;">
+                  Your Login Details
+                </h3>
+
+                <table cellpadding="10" cellspacing="0" width="100%"
+                       style="color:#374151; font-size:14px; border-collapse:collapse;">
+                  <tr>
+                    <td width="35%" style="font-weight:bold;">Email:</td>
+                    <td>${email}</td>
+                  </tr>
+                  <tr>
+                    <td width="35%" style="font-weight:bold;">Password:</td>
+                    <td>${password}</td>
+                  </tr>
+                  <tr>
+                    <td width="35%" style="font-weight:bold;">Role:</td>
+                    <td>Sub Admin</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td align="center" style="padding:20px 35px 10px; font-size:14px; color:#6b7280;">
+                Thank you for joining our administrative team.
+                <br />
+                <strong>The Editorial Team</strong>
+              </td>
+            </tr>
+
+            <tr>
+              <td align="center" style="font-size:12px; color:#9ca3af; padding:15px 35px 30px;">
+                © 2026 Journal Name. All rights reserved.
+              </td>
+            </tr>
+
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+            `,
+            }),
+          );
+        });
 
       setIsDialogOpen(false);
       setEmail("");

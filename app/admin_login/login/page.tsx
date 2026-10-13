@@ -42,10 +42,13 @@ const AdminLogin: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted with data:", formData, "Role:", selectedRole);
+
     if (selectedRole === "ADMIN") {
       const result = await dispatch(adminLogin(formData));
 
+      if (result.payload.error === "Invalid username or password ❌") {
+        return null;
+      }
       if (adminLogin.fulfilled.match(result)) {
         const payload = result.payload as { role?: string; message?: string };
 
@@ -54,18 +57,23 @@ const AdminLogin: React.FC = () => {
     }
     if (selectedRole === "SUB_ADMIN") {
       const result = await dispatch(loginSubUser(formData));
-      localStorage.setItem("tokenSubAdmin", result.payload.token);
-      localStorage.setItem("email", result.payload.username);
-      localStorage.setItem(
-        "permissions",
-        JSON.stringify(result.payload.permissions),
-      );
-
-      console.log("Sub Admin :", result.payload.permissions);
-      if (loginSubUser.fulfilled.match(result)) {
-        const payload = result.payload;
+      console.log("result ", result.payload.error);
+      if (
+        result.payload.token != null &&
+        result.payload.permissions != undefined
+      ) {
+        localStorage.setItem("tokenSubAdmin", result.payload.token);
+        localStorage.setItem("email", result.payload.username);
+        localStorage.setItem(
+          "permissions",
+          JSON.stringify(result.payload.permissions),
+        );
 
         router.push(`/admin`);
+      }
+
+      if (loginSubUser.fulfilled.match(result)) {
+        const payload = result.payload;
       }
     }
   };

@@ -9,10 +9,8 @@ import {
   clearReviewerMessage,
   registerReviewer,
 } from "../../adminSlice/reviewer/reviewerSlice";
-import {
-  sendArticleEmail,
-  sendReviewerEmail,
-} from "../../adminSlice/emailSlice";
+import { sendReviewerEmail } from "../../adminSlice/emailSlice";
+import { sendMail } from "../../adminSlice/contact_info/addContactInfo";
 
 export default function ReviewersPage() {
   const dispatch = useAppDispatch();
@@ -67,11 +65,11 @@ export default function ReviewersPage() {
         }),
       ).unwrap();
       dispatch(
-        sendReviewerEmail({
-          toEmail: email,
-          authorName: name,
-          articleTitle: "Reviewer Account Created",
-          status: "Created",
+        sendMail({
+          email: email,
+
+          subject: "Reviewer Account Created",
+
           body: `
          <!DOCTYPE html>
 <html>
@@ -446,13 +444,11 @@ export default function ReviewersPage() {
               <tbody>
                 {reviewers.map((reviewer) => (
                   <tr
+                    className="text-sm"
                     key={reviewer.id}
                     style={{ borderTop: "1px solid #e2e8f0" }}
                   >
-                    <td style={{ padding: "12px 16px" }}>
-                      {" "}
-                      #{reviewer.id} {reviewer.name}
-                    </td>
+                    <td style={{ padding: "12px 16px" }}> {reviewer.name}</td>
                     <td style={{ padding: "12px 16px" }}>{reviewer.email}</td>
                   </tr>
                 ))}

@@ -10,6 +10,11 @@ export interface SubUser {
   username: string;
   permissions: string[];
 }
+export interface SubUser {
+  id: number;
+  username: string;
+  permissions: string[];
+}
 
 interface SubUserState {
   users: SubUser[];
@@ -47,6 +52,46 @@ const initialState: SubUserState = {
   message: null,
 };
 
+interface UpdateReviewerPasswordRequest {
+  email: string;
+  currentPassword: string;
+  newPassword: string;
+}
+
+export const updateSubadminPassword = createAsyncThunk<
+  string,
+  UpdateReviewerPasswordRequest,
+  { rejectValue: string }
+>("reviewer/updatePassword", async (payload, { rejectWithValue }) => {
+  try {
+    const token = await localStorage.getItem("tokenSubAdmin");
+
+    const response = await fetch(
+      `${BACKEND_URL}/sub-user/update-password?email=${payload.email}&currentPassword=${payload.currentPassword}&newPassword=${payload.newPassword}`,
+      {
+        method: "PUT",
+
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    const data = await response.json().catch(() => null);
+
+    if (!response.ok) {
+      return rejectWithValue(
+        data?.message || data?.error || "Failed to update reviewer password",
+      );
+    }
+
+    return data?.message || "Password updated successfully";
+  } catch {
+    return rejectWithValue("Unable to connect to the server");
+  }
+});
 // Helper for Spring Boot API errors
 async function getErrorMessage(response: Response): Promise<string> {
   const data: ApiError = await response.json().catch(() => ({}));
@@ -185,6 +230,9 @@ export const loginSubUser = createAsyncThunk(
 
       const data = await response.json();
 
+      if (data.error === "Invalid username or password") {
+        alert("Invalid username or password");
+      }
       return data;
     } catch {
       return rejectWithValue("Unable to connect to server");
@@ -342,6 +390,22 @@ const subUserSlice = createSlice({
       // })
       .addCase(updateSubUserPermissions.rejected, (state, action) => {
         state.error = action.payload ?? "Permission update failed";
+      }) // ----------------------------
+      // UPDATE REVIEWER PASSWORD
+      // ----------------------------
+      .addCase(updateSubadminPassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.message = null;
+      })
+      .addCase(updateSubadminPassword.fulfilled, (state, action) => {
+        state.loading = false;
+        state.message = action.payload;
+      })
+      .addCase(updateSubadminPassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          action.payload || action.error.message || "Failed to update password";
       });
   },
 });

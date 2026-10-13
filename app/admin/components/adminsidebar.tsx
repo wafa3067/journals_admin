@@ -256,7 +256,7 @@ const AdminSidebar = () => {
             color="white"
             onClick={() => {
               dispatch(logout());
-              navigation.navigate("/splash_screen");
+              navigation.navigate("/");
             }}
           />
           {/* Mobile close button */}

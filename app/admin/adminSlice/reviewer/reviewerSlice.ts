@@ -6,7 +6,7 @@ import {
   PayloadAction,
 } from "@reduxjs/toolkit";
 
-const API_URL = `${BACKEND_URL}`;
+const API_URL = `${BACKEND_URL}/reviewer`;
 
 // Reviewer returned by the backend
 export interface Reviewer {
@@ -51,6 +51,58 @@ const initialState: ReviewerState = {
   data: null,
   username: null,
 };
+
+
+
+interface UpdateReviewerPasswordRequest {
+  email: string;
+  currentPassword: string;
+  newPassword: string;
+}
+
+
+
+export const updateReviewerPassword = createAsyncThunk<
+  string,
+  UpdateReviewerPasswordRequest,
+  { rejectValue: string }
+>(
+  "reviewer/updatePassword",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const token=await localStorage.getItem("adminToken");
+      
+      const response = await fetch(
+        `${API_URL}/update-password?email=${payload.email}&currentPassword=${payload.currentPassword}&newPassword=${payload.newPassword}`,
+        {
+          method: "PUT",
+          
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            
+          },
+        
+        }
+      );
+
+      const data = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        return rejectWithValue(
+          data?.message ||
+            data?.error ||
+            "Failed to update reviewer password"
+        );
+      }
+
+      return data?.message || "Password updated successfully";
+    } catch {
+      return rejectWithValue("Unable to connect to the server");
+    }
+  }
+);
 
 // ============================================
 // GET ALL REVIEWERS
@@ -269,7 +321,26 @@ const reviewerSlice = createSlice({
         state.loading = false;
         state.error =
           action.payload || action.error.message || "Login failed";
-      });
+      })
+      // ----------------------------
+      // UPDATE REVIEWER PASSWORD
+      // ----------------------------
+      .addCase(updateReviewerPassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.message = null;
+      })
+      .addCase(updateReviewerPassword.fulfilled, (state, action) => {
+        state.loading = false;
+        state.message = action.payload;
+      })
+      .addCase(updateReviewerPassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          action.payload ||
+          action.error.message ||
+          "Failed to update password";
+      })
   },
 });
 
@@ -282,6 +353,7 @@ export const {
   clearReviewerMessage,
   setReviewerCredentials,
   clearReviewers,
+  
 } = reviewerSlice.actions;
 
 export default reviewerSlice.reducer;

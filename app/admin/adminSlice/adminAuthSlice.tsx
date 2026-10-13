@@ -39,9 +39,11 @@ export const adminLogin = createAsyncThunk(
           password: credentials.password,
         },
       });
+
       if (res.status != 200) {
         return rejectWithValue("Invalid username or password ❌");
       }
+      console.log("Res", res.status);
 
       return res.data;
     } catch (err: unknown) {

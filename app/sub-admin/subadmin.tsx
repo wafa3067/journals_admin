@@ -5,6 +5,8 @@ import { LogOut } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { MdOutlineUpdate, MdPassword } from "react-icons/md";
+import { TbPasswordUser } from "react-icons/tb";
 interface data {
   permit: Array<String>;
 }
@@ -259,7 +261,14 @@ const SubAdminSidebar = (val: data) => {
               await localStorage.removeItem("adminToken");
               await localStorage.removeItem("permissions");
 
-              navigation.navigate("/splash_screen");
+              navigation.navigate("/");
+            }}
+          />
+          <TbPasswordUser
+            size={25}
+            color="white"
+            onClick={async () => {
+              navigation.navigate("/admin/users/sub-admin-update");
             }}
           />
           {/* Mobile close button */}
