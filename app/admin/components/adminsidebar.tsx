@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { logout } from "../adminSlice/adminAuthSlice";
 import { useAppDispatch } from "@/app/api/hooks/hooks";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const AdminSidebar = () => {
   const pathname = usePathname();
