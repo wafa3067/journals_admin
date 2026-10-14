@@ -724,6 +724,10 @@ export default function Page() {
                       Note Reviewer Response Will shown below
                     </p>
 
+                    {article.reviewerComment && (
+                      <p>Reviewer:{article.reviewerComment}</p>
+                    )}
+
                     <div>
                       {article.reviewerAnser && (
                         <p>

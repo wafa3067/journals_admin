@@ -567,6 +567,9 @@ export default function UnderReviewPage() {
                   <p className="text-red-600">
                     Note Reviewer Response Will shown below
                   </p>
+                  {article.reviewerComment && (
+                    <p>Reviewer:{article.reviewerComment}</p>
+                  )}
                   {article.reviewerAnser && (
                     <div>
                       <p>

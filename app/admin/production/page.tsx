@@ -568,6 +568,9 @@ Editorial Office`);
                     </a>
                   </p>
 
+                  {article.reviewerComment && (
+                    <p>Reviewer:{article.reviewerComment}</p>
+                  )}
                   {article.productionComments && (
                     <div className="text-black capitalize">
                       <p className="font-bold">ProductionNotes:</p>
